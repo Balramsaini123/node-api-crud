@@ -40,8 +40,26 @@ const userSchema = new mongoose.Schema({
             }
         }
     },
+    user_image: {
+        type: String,
+        default: null,
+        require: true
+    }
     // tokens: [{type: Object}],
 });
+
+// Define a virtual property for jobs
+userSchema.virtual('Tasks', {
+    ref: 'Tasks', // The model to use
+    localField: '_id', // Find jobs where `localField`
+    foreignField: 'user_id', // is equal to `foreignField`
+    justOne: false, // true for one-to-one relationships, false for one-to-many
+});
+
+// Make sure virtual fields are included in output
+userSchema.set('toObject', { virtuals: true });
+userSchema.set('toJSON', { virtuals: true });
+
 
 userSchema.pre('save', async function(next) {
     const user = this;

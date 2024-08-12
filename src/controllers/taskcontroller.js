@@ -24,7 +24,7 @@ async function taskGet(req, res) {
     const _id = req.params.id;
 
     try {
-        const task = await Tasks.findById(_id);
+        const task = await Tasks.findById(_id).populate('user_id');
         if (!task) {
             return res.status(404).send();
         }

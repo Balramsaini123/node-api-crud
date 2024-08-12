@@ -2,7 +2,9 @@ const express = require('express')
 const {userCreate,usersGet,userGet,userUpdate,userDelete,userLogin,userLogout} = require('../controllers/usercontroller')
 const taskController = require('../controllers/taskcontroller');
 const SendEmailController = require('../controllers/SendEmailController')
+const ImageUploadController = require('../controllers/ImageUploadController')
 const auth = require('../middlewares/authenticate')
+const uploads = require('../middlewares/upload')
 const router = new express.Router();
 
 //user routes
@@ -23,4 +25,6 @@ router.delete('/tasks/:taskId',auth, taskController.taskDelete)
 router.post('/login',userLogin);
 router.post('/logout', auth, userLogout);
 router.get('/sendemail', SendEmailController.sendMail);
+router.post('/upload', auth, uploads, ImageUploadController.imageUpload);
+
 module.exports = router

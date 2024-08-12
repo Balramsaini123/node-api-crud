@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const Tasks = require('../models/task');
 const SECRET_KEY = 'Balramsaini@123#$';
 async function userCreate(req, res) {
     // Create a new user object with the request body data.
@@ -30,6 +31,8 @@ async function usersGet(req, res) {
         if (!users || users.length === 0) {
             return res.status(404).send({ message: 'Users not found' });
         }
+        // Manually populate tasks for each user
+
         res.status(200).send(users);
     } catch (e) {
         res.status(500).send({ error: e.message });
@@ -40,7 +43,8 @@ async function userGet(req, res) {
     const _id = req.params.id;
 
     try {
-        const user = await User.findById(_id);
+        const user = await User.findById(_id).populate('Tasks','') // Automatically populates the jobs based on the virtual
+        
         if (!user) {
             return res.status(404).send({ message: 'User not found' });
         }
